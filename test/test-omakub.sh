@@ -26,6 +26,8 @@ multipass launch 24.04 \
 #cloud-config
 ssh_pwauth: true
 
+users:
+  - default
 chpasswd:
   list: |
     ubuntu:${PASSWD}      # <-- expands to the value you pass on the CLI
@@ -50,8 +52,8 @@ packages:
 runcmd:
   - [ systemctl, enable, xrdp ]
   - [ systemctl, restart, xrdp ]
-  - [ bash, -c, "su - ubuntu -c 'curl -fsSL ${REPO_RAW} -o ~/boot.sh'" ]
-  - [ bash, -c, "su - ubuntu -c 'chmod +x ~/boot.sh && ~/boot.sh'" ]
+  - [ bash, -c, "su - ubuntu -c 'export OMAKUB_AUTOMATED_TEST=true && curl -fsSL ${REPO_RAW} -o ~/boot.sh'" ]
+  - [ bash, -c, "su - ubuntu -c 'export OMAKUB_AUTOMATED_TEST=true && chmod +x ~/boot.sh && ~/boot.sh'" ]
 EOF
 
 # ── PRINT RDP INFO ─────────────────────────────────────────────────────────
