@@ -3,7 +3,7 @@ set -euo pipefail
 
 # ── CLI flags ──────────────────────────────────────────────────────────────
 REPO=
-BRANCH=main
+BRANCH=master
 VM_NAME=omakub-test
 PASSWD=omakub          # RDP password for “ubuntu”
 
