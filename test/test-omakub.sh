@@ -1,33 +1,36 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# ---------- CLI flags ----------
+# ── CLI flags ──────────────────────────────────────────────────────────────
 REPO=
 BRANCH=main
 VM_NAME=omakub-test
-PASSWD=omakub
+PASSWD=omakub          # RDP password for “ubuntu”
 
 while [[ $# -gt 0 ]]; do
   case $1 in
-    --repo)   REPO="$2"; shift 2;;
-    --branch) BRANCH="$2"; shift 2;;
-    --vm)     VM_NAME="$2"; shift 2;;
-    --passwd) PASSWD="$2"; shift 2;;
-    *) echo "Unknown flag $1"; exit 1;;
+    --repo)   REPO="$2"; shift 2 ;;
+    --branch) BRANCH="$2"; shift 2 ;;
+    --vm)     VM_NAME="$2"; shift 2 ;;
+    --passwd) PASSWD="$2"; shift 2 ;;
+    *) echo "Unknown flag $1"; exit 1 ;;
   esac
 done
 
 [[ -z "$REPO" ]] && { echo "❌  --repo is required"; exit 1; }
 
-# ---------- cloud-init ----------
-TMP=$(mktemp -d)
-CLOUD="$TMP/cloud-init.yaml"
+# ── Launch VM ──────────────────────────────────────────────────────────────
+echo "▶ Launching VM '${VM_NAME}' … (first boot takes a few minutes)"
 
-cat >"$CLOUD" <<EOF
+multipass launch 24.04 \
+  --name    "${VM_NAME}" \
+  --cpus    4            \
+  --memory  8G           \
+  --disk    25G          \
+  --cloud-init - <<EOF
 #cloud-config
 ssh_pwauth: true
-users:
-  - default
+
 chpasswd:
   list: |
     ubuntu:${PASSWD}
@@ -42,26 +45,18 @@ packages:
   - xrdp
 
 runcmd:
-  - systemctl enable xrdp
-  - systemctl restart xrdp
-  - su - ubuntu -c "git clone ${REPO} repo"
-  - su - ubuntu -c "cd repo && git switch ${BRANCH} || git checkout -b ${BRANCH} origin/${BRANCH}"
+  - [ systemctl, enable, xrdp ]
+  - [ systemctl, restart, xrdp ]
+  - [ bash, -c, "su - ubuntu -c \"git clone ${REPO} repo\"" ]
+  - [ bash, -c, "su - ubuntu -c \"cd repo && git switch ${BRANCH} || git checkout -b ${BRANCH} origin/${BRANCH}\"" ]
 EOF
 
-# ---------- launch VM ----------
-echo "▶ Launching VM '${VM_NAME}' …"
-multipass launch 24.04 \
-  --name  "${VM_NAME}" \
-  --cpus  4             \
-  --mem   8G            \
-  --disk  25G           \
-  --cloud-init "$CLOUD"
-
+# ── Print connection info ─────────────────────────────────────────────────
 IP=$(multipass info "$VM_NAME" | awk '/IPv4/ {print $2}')
 
 cat <<EOS
 
-🎉  VM booting.  When ready, RDP in:
+🎉  VM is booting.  When ready, connect via RDP:
 
     Host : $IP
     User : ubuntu
@@ -70,15 +65,14 @@ cat <<EOS
     Example:
         remmina "rdp://${IP}"
 
-💡  Inside the session run:
+Inside the GNOME session run:
 
-        cd ~/repo
-        ./install.sh
+    cd ~/repo
+    ./install.sh         # follow the interactive prompts
 
-     …and step through every prompt interactively.
+To reset for another test run:
 
-🔁  To start over:
-        multipass delete ${VM_NAME} && multipass purge
-        ./test-omakub.sh --repo $REPO --branch $BRANCH --vm ${VM_NAME}
+    multipass delete ${VM_NAME} && multipass purge
+    ./test-omakub.sh --repo $REPO --branch $BRANCH --vm ${VM_NAME}
 
 EOS
