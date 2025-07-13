@@ -40,7 +40,7 @@ package_update: true
 packages:
   - curl
   - git
-  - ubuntu-desktop-minimal
+  - ubuntu-desktop
   - gnome-shell-extension-manager
   - xrdp
 
