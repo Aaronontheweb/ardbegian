@@ -4,7 +4,7 @@ set -euo pipefail
 # ── CLI flags ──────────────────────────────────────────────────────────────
 REPO_RAW=https://raw.githubusercontent.com/Aaronontheweb/ardbegian/master/boot.sh
 VM_NAME=omakub-test
-PASSWD=omakub     # password for “ubuntu” (RDP)
+PASSWD=omakub     # password for "ubuntu" (RDP)
 
 while [[ $# -gt 0 ]]; do
   case $1 in
@@ -40,9 +40,12 @@ package_update: true
 packages:
   - curl
   - git
+  - bc                    # Required for version comparison in check-version.sh
   - ubuntu-desktop
   - gnome-shell-extension-manager
   - xrdp
+  - wget                  # Required for mise installation
+  - gpg                   # Required for mise installation
 
 runcmd:
   - [ systemctl, enable, xrdp ]
@@ -52,13 +55,13 @@ runcmd:
 EOF
 
 # ── PRINT RDP INFO ─────────────────────────────────────────────────────────
-IP=\$(multipass info "$VM_NAME" | awk '/IPv4/ {print \$2}')
+IP=$(multipass info "$VM_NAME" | awk '/IPv4/ {print $2}')
 
 cat <<EOS
 
-🎉  VM is booting.  When it’s ready, connect via RDP:
+🎉  VM is booting.  When it's ready, connect via RDP:
 
-    Host : \$IP
+    Host : $IP
     User : ubuntu
     Pass : $PASSWD
 
