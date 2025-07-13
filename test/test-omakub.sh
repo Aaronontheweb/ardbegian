@@ -26,10 +26,10 @@ multipass launch 24.04 \
 #cloud-config
 ssh_pwauth: true
 
-chpasswd:
-  list: |
-    ubuntu:${PASSWD}
-  expire: false
+bootcmd:
+  # point resolved at Cloudflare + Google (edit to taste)
+  - printf '[Resolve]\nDNS=1.1.1.1 8.8.8.8\nDNSStubListener=no\n' > /etc/systemd/resolved.conf
+  - [ systemctl, restart, systemd-resolved ]
 
 package_update: true
 packages:
@@ -39,25 +39,9 @@ packages:
   - gnome-shell-extension-manager
   - xrdp
 
-# optional: guarantee DHCP + DNS every boot
-write_files:
-  - path: /etc/netplan/50-multipass.yaml
-    permissions: '0644'
-    content: |
-      network:
-        version: 2
-        ethernets:
-          ens3:
-            dhcp4: true
-            nameservers:
-              addresses: [1.1.1.1, 8.8.8.8]
-
 runcmd:
-  # enable & start RDP
   - [ systemctl, enable, xrdp ]
   - [ systemctl, restart, xrdp ]
-
-  # fetch and execute boot.sh under the ubuntu user
   - [ bash, -c, "su - ubuntu -c 'curl -fsSL ${REPO_RAW} -o ~/boot.sh'" ]
   - [ bash, -c, "su - ubuntu -c 'chmod +x ~/boot.sh && ~/boot.sh'" ]
 EOF
