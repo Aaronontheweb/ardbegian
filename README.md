@@ -26,9 +26,7 @@ Run `./test/test-omakub.sh`:
 
 ```bash
 ./test/test-omakub.sh  \
-  --repo   https://github.com/YOUR_USER/YOUR_FORK.git \
-  --branch master                  \
-  --vm     omakub-test                              \
+  --vm     omakub-test \
   --passwd omakub        # password for “ubuntu” over RDP
 ```
 
