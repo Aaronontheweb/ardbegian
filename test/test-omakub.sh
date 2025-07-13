@@ -4,7 +4,7 @@ set -euo pipefail
 # ── CLI flags ──────────────────────────────────────────────────────────────
 REPO_RAW=https://raw.githubusercontent.com/Aaronontheweb/ardbegian/master/boot.sh
 VM_NAME=omakub-test
-PASSWD=omakub     # password for “ubuntu” (RDP)
+PASSWD=omakub     # password for "ubuntu" (RDP)
 
 while [[ $# -gt 0 ]]; do
   case $1 in
@@ -26,6 +26,8 @@ multipass launch 24.04 \
 #cloud-config
 ssh_pwauth: true
 
+users:
+  - default
 chpasswd:
   list: |
     ubuntu:${PASSWD}      # <-- expands to the value you pass on the CLI
@@ -40,25 +42,28 @@ package_update: true
 packages:
   - curl
   - git
-  - ubuntu-desktop-minimal
+  - bc                    # Required for version comparison in check-version.sh
+  - ubuntu-desktop
   - gnome-shell-extension-manager
   - xrdp
+  - wget                  # Required for mise installation
+  - gpg                   # Required for mise installation
 
 runcmd:
   - [ systemctl, enable, xrdp ]
   - [ systemctl, restart, xrdp ]
-  - [ bash, -c, "su - ubuntu -c 'curl -fsSL ${REPO_RAW} -o ~/boot.sh'" ]
-  - [ bash, -c, "su - ubuntu -c 'chmod +x ~/boot.sh && ~/boot.sh'" ]
+  - [ bash, -c, "su - ubuntu -c 'export OMAKUB_AUTOMATED_TEST=true && curl -fsSL ${REPO_RAW} -o ~/boot.sh'" ]
+  - [ bash, -c, "su - ubuntu -c 'export OMAKUB_AUTOMATED_TEST=true && chmod +x ~/boot.sh && ~/boot.sh'" ]
 EOF
 
 # ── PRINT RDP INFO ─────────────────────────────────────────────────────────
-IP=\$(multipass info "$VM_NAME" | awk '/IPv4/ {print \$2}')
+IP=$(multipass info "$VM_NAME" | awk '/IPv4/ {print $2}')
 
 cat <<EOS
 
-🎉  VM is booting.  When it’s ready, connect via RDP:
+🎉  VM is booting.  When it's ready, connect via RDP:
 
-    Host : \$IP
+    Host : $IP
     User : ubuntu
     Pass : $PASSWD
 
