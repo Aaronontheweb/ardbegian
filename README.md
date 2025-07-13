@@ -48,6 +48,10 @@ multipass info omakub-test
 
 And then connect over RDP to view the desktop. Run the `./install.sh` script after you connect to test the installation.
 
+```bash
+sudo snap install remmina # if remmina is not already installed
+```
+
 ### Cleanup
 
 To cleanup the VM, do the following:
