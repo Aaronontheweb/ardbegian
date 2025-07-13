@@ -26,6 +26,11 @@ multipass launch 24.04 \
 #cloud-config
 ssh_pwauth: true
 
+chpasswd:
+  list: |
+    ubuntu:${PASSWD}      # <-- expands to the value you pass on the CLI
+  expire: false           # keep the password valid
+
 bootcmd:
   # point resolved at Cloudflare + Google (edit to taste)
   - printf '[Resolve]\nDNS=1.1.1.1 8.8.8.8\nDNSStubListener=no\n' > /etc/systemd/resolved.conf
