@@ -42,7 +42,11 @@ if [[ -n "$languages" ]]; then
       mise use --global java@latest
       ;;
     .NET)
-      sudo apt-get install -y dotnet-sdk-9.0
+      # Install .NET 9.0 using Microsoft's official installer
+      curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 9.0
+      # Add to PATH for current session and future sessions
+      echo 'export PATH="$HOME/.dotnet:$PATH"' >> ~/.bashrc
+      export PATH="$HOME/.dotnet:$PATH"
       ;;
     esac
   done
