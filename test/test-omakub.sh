@@ -44,18 +44,16 @@ packages:
   - bc                    # Required for version comparison in check-version.sh
   - ubuntu-desktop
   - gnome-shell-extension-manager
-  - xrdp
-  - xorgxrdp
   - wget                  # Required for mise installation
   - gpg                   # Required for mise installation
 
 runcmd:
-  - [ systemctl, enable, xrdp ]
-  - [ systemctl, restart, xrdp ]
-  # Configure GNOME for remote desktop
-  - [ bash, -c, "gsettings set org.gnome.desktop.remote-desktop.rdp enable true" ]
-  - [ bash, -c, "gsettings set org.gnome.desktop.remote-desktop.rdp view-only false" ]
-  - [ bash, -c, "gsettings set org.gnome.desktop.remote-desktop.rdp enable-credentials-prompt false" ]
+  # Configure GNOME built-in Remote Desktop for RDP (as ubuntu user)
+  - [ bash, -c, "su - ubuntu -c 'gsettings set org.gnome.desktop.remote-desktop.rdp enable true'" ]
+  - [ bash, -c, "su - ubuntu -c 'gsettings set org.gnome.desktop.remote-desktop.rdp view-only false'" ]
+  - [ bash, -c, "su - ubuntu -c 'gsettings set org.gnome.desktop.remote-desktop.rdp enable-credentials-prompt false'" ]
+  - [ bash, -c, "su - ubuntu -c 'gsettings set org.gnome.desktop.remote-desktop.rdp authentication-methods \"[\\'password\\']\"'" ]
+  - [ bash, -c, "su - ubuntu -c 'gsettings set org.gnome.desktop.remote-desktop.rdp password \"${PASSWD}\"'" ]
   # Ensure XDG_CURRENT_DESKTOP is set for Omakub installation
   - [ bash, -c, "echo 'export XDG_CURRENT_DESKTOP=GNOME' >> /home/ubuntu/.bashrc" ]
   - [ bash, -c, "su - ubuntu -c 'export OMAKUB_AUTOMATED_TEST=true && export XDG_CURRENT_DESKTOP=GNOME && curl -fsSL ${REPO_RAW} -o ~/boot.sh'" ]
