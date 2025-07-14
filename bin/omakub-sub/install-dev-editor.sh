@@ -1,13 +1,14 @@
 CHOICES=(
   "Cursor            AI Code Editor"
   "Doom Emacs        Emacs framework with curated list of packages"
+  "JetBrains Toolbox Install JetBrains IDEs (Rider, IntelliJ, etc.)"
   "RubyMine          IntelliJ's commercial Ruby editor"
   "Windsurf          Another AI Code Editor"
   "Zed               Fast all-purpose editor"
   "<< Back           "
 )
 
-CHOICE=$(gum choose "${CHOICES[@]}" --height 8 --header "Install editor")
+CHOICE=$(gum choose "${CHOICES[@]}" --height 9 --header "Install editor")
 
 if [[ "$CHOICE" == "<< Back"* ]] || [[ -z "$CHOICE" ]]; then
   # Don't install anything
