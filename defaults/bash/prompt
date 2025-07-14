@@ -2,6 +2,47 @@
 force_color_prompt=yes
 color_prompt=yes
 
-# Simple prompt with path in the window/pane title and caret for typing line
-PS1=$'\uf0a9 '
-PS1="\[\e]0;\w\a\]$PS1"
+# Git prompt function
+parse_git_branch() {
+    git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
+}
+
+# Git status indicators
+parse_git_status() {
+    local status=""
+    local branch=$(git branch 2> /dev/null | sed -n 's/* \(.*\)/\1/p')
+    
+    if [ -n "$branch" ]; then
+        # Check if working directory is clean
+        if [ -n "$(git status --porcelain 2> /dev/null)" ]; then
+            status+=" ●"  # Uncommitted changes
+        fi
+        
+        # Check if ahead/behind remote
+        local ahead=$(git rev-list --count @{u}..HEAD 2> /dev/null)
+        local behind=$(git rev-list --count HEAD..@{u} 2> /dev/null)
+        
+        if [ "$ahead" != "0" ] && [ "$behind" != "0" ]; then
+            status+=" ⇅"  # Diverged
+        elif [ "$ahead" != "0" ]; then
+            status+=" ↑"  # Ahead
+        elif [ "$behind" != "0" ]; then
+            status+=" ↓"  # Behind
+        fi
+        
+        # Check for untracked files
+        if [ -n "$(git ls-files --others --exclude-standard 2> /dev/null)" ]; then
+            status+=" +"  # Untracked files
+        fi
+        
+        # Check for stashed changes
+        if [ -n "$(git stash list 2> /dev/null)" ]; then
+            status+=" 💾"  # Stashed changes
+        fi
+    fi
+    
+    echo "$status"
+}
+
+# Enhanced prompt with git information
+PS1='\[\e]0;\w\a\]\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\[\033[01;33m\]$(parse_git_branch)\[\033[00m\]\[\033[01;31m\]$(parse_git_status)\[\033[00m\] $ '
