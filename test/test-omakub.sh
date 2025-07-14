@@ -6,9 +6,6 @@ REPO_RAW=https://raw.githubusercontent.com/Aaronontheweb/ardbegian/master/boot.s
 VM_NAME=omakub-test
 PASSWD=omakub     # password for "ubuntu" (RDP)
 
-# Generate hashed password for cloud-init
-PASSWD_HASH=$(openssl passwd -6 "$PASSWD")
-
 while [[ $# -gt 0 ]]; do
   case $1 in
     --vm)     VM_NAME="$2"; shift 2 ;;
@@ -29,12 +26,11 @@ multipass launch 24.04 \
 #cloud-config
 ssh_pwauth: true
 
-users:
-  - name: ubuntu
-    sudo: ALL=(ALL) NOPASSWD:ALL
-    shell: /bin/bash
-    groups: [adm, cdrom, dip, plugdev, lxd, sudo]
-    hashed_passwd: ${PASSWD_HASH}
+# Set password for the default ubuntu user
+chpasswd:
+  list: |
+    ubuntu:${PASSWD}
+  expire: false
 
 bootcmd:
   # point resolved at Cloudflare + Google (edit to taste)
