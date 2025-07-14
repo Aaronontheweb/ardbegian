@@ -1,10 +1,22 @@
 #!/bin/bash
 
 # Remove JetBrains Toolbox installation
-sudo rm -rf /opt/jetbrains-toolbox
+echo "Removing JetBrains Toolbox..."
 
-# Remove user data (optional - uncomment if you want to remove all data)
-# rm -rf ~/.local/share/JetBrains
-# rm -rf ~/.config/JetBrains
+# Remove the main installation directory
+rm -rf ~/.local/share/JetBrains/Toolbox
 
-echo "JetBrains Toolbox uninstalled successfully!" 
+# Remove symlink if it exists
+rm -f ~/.local/bin/jetbrains-toolbox
+
+# Remove desktop entry if it exists
+rm -f ~/.local/share/applications/jetbrains-toolbox.desktop
+
+# Remove autostart entry if it exists
+rm -f ~/.config/autostart/jetbrains-toolbox.desktop
+
+echo "JetBrains Toolbox uninstalled successfully!"
+echo "Note: Individual IDE installations and user data are preserved."
+echo "To remove all JetBrains data, run:"
+echo "  rm -rf ~/.local/share/JetBrains"
+echo "  rm -rf ~/.config/JetBrains" 

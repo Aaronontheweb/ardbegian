@@ -14,8 +14,31 @@ if [[ "$CHOICE" == "<< Back"* ]] || [[ -z "$CHOICE" ]]; then
   # Don't install anything
   echo ""
 else
-  INSTALLER=$(echo "$CHOICE" | awk -F ' {2,}' '{print $1}' | tr '[:upper:]' '[:lower:]' | sed 's/ /-/g')
-  INSTALLER_FILE="$OMAKUB_PATH/install/desktop/optional/app-$INSTALLER.sh"
+  # Extract the application name and map to the correct installer file
+  case "$CHOICE" in
+    "Cursor"*)
+      INSTALLER_FILE="$OMAKUB_PATH/install/desktop/optional/app-cursor.sh"
+      ;;
+    "Doom Emacs"*)
+      INSTALLER_FILE="$OMAKUB_PATH/install/desktop/optional/app-doom-emacs.sh"
+      ;;
+    "JetBrains Toolbox"*)
+      INSTALLER_FILE="$OMAKUB_PATH/install/desktop/optional/app-jetbrains-toolbox.sh"
+      ;;
+    "RubyMine"*)
+      INSTALLER_FILE="$OMAKUB_PATH/install/desktop/optional/app-rubymine.sh"
+      ;;
+    "Windsurf"*)
+      INSTALLER_FILE="$OMAKUB_PATH/install/desktop/optional/app-windsurf.sh"
+      ;;
+    "Zed"*)
+      INSTALLER_FILE="$OMAKUB_PATH/install/desktop/optional/app-zed.sh"
+      ;;
+    *)
+      echo "Unknown choice: $CHOICE"
+      exit 1
+      ;;
+  esac
 
   source $INSTALLER_FILE && gum spin --spinner globe --title "Install completed!" -- sleep 3
 fi
