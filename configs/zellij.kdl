@@ -2,6 +2,24 @@ theme "tokyo-night"
 default_layout "compact"
 on_force_close "quit"
 
+# Status bar configuration
+status_bar {
+    mode "locked" {
+        right {
+            command "git" {
+                args "branch" "--show-current"
+                display "branch"
+                interval 1
+            }
+            command "git" {
+                args "status" "--porcelain"
+                display "status"
+                interval 1
+            }
+        }
+    }
+}
+
 default_mode "locked"
 keybinds clear-defaults=true {
     locked {
