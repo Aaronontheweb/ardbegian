@@ -45,8 +45,12 @@ if [[ -n "$languages" ]]; then
       # Install .NET 9.0 using Microsoft's official installer
       curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 9.0
       # Add to PATH for current session and future sessions
-      echo 'export PATH="$HOME/.dotnet:$PATH"' >> ~/.bashrc
-      export PATH="$HOME/.dotnet:$PATH"
+      # Include both .dotnet (for dotnet CLI) and .dotnet/tools (for global tools)
+      echo 'export PATH="$HOME/.dotnet:$HOME/.dotnet/tools:$PATH"' >> ~/.bashrc
+      export PATH="$HOME/.dotnet:$HOME/.dotnet/tools:$PATH"
+      # Set DOTNET_ROOT so global tools can find the .NET runtime
+      echo 'export DOTNET_ROOT="$HOME/.dotnet"' >> ~/.bashrc
+      export DOTNET_ROOT="$HOME/.dotnet"
       ;;
     esac
   done
