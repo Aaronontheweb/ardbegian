@@ -1,6 +1,6 @@
-theme "tokyo-night"
-default_layout "compact"
-on_force_close "quit"
+theme "tokyo-night";
+default_layout "compact";
+on_force_close "quit";
 
 # Status bar configuration
 status_bar {
@@ -20,7 +20,7 @@ status_bar {
     }
 }
 
-default_mode "locked"
+default_mode "locked";
 keybinds clear-defaults=true {
     locked {
         bind "Ctrl g" { SwitchToMode "normal"; }
