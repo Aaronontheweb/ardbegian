@@ -24,6 +24,12 @@ default_mode "locked";
 keybinds clear-defaults=true {
     locked {
         bind "Ctrl g" { SwitchToMode "normal"; }
+        // Send Ctrl+C (ASCII 3) to the terminal to allow interrupt signals
+        bind "Ctrl c" { Write 3; }
+    }
+    normal {
+        // Send Ctrl+C (ASCII 3) to the terminal to allow interrupt signals
+        bind "Ctrl c" { Write 3; }
     }
     pane {
         bind "Left" { MoveFocus "left"; }
@@ -169,6 +175,8 @@ keybinds clear-defaults=true {
         bind "Alt l" { MoveFocusOrTab "right"; }
         bind "Alt n" { NewPane; }
         bind "Alt o" { MoveTab "right"; }
+        // Ensure Ctrl+C works in both normal and locked modes
+        bind "Ctrl c" { Write 3; }
     }
     shared_except "locked" "renametab" "renamepane" {
         bind "Ctrl g" { SwitchToMode "locked"; }
@@ -197,6 +205,8 @@ keybinds clear-defaults=true {
     }
     shared_except "locked" "resize" "pane" "tab" "entersearch" "renametab" "renamepane" {
         bind "r" { SwitchToMode "resize"; }
+        // Add Ctrl+C passthrough for these modes
+        bind "Ctrl c" { Write 3; }
     }
     shared_among "scroll" "search" {
         bind "PageDown" { PageScrollDown; }
@@ -215,6 +225,7 @@ keybinds clear-defaults=true {
         bind "u" { HalfPageScrollUp; }
     }
     entersearch {
+        // Removed Ctrl+C binding to allow interrupt signal to pass through
         bind "Esc" { SwitchToMode "scroll"; }
         bind "Enter" { SwitchToMode "search"; }
     }
