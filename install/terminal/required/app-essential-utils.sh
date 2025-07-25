@@ -31,4 +31,9 @@ if ! command -v git &> /dev/null; then
     sudo apt install -y git
 fi
 
+# Install snapd (used for snap package installations)
+if ! command -v snap &> /dev/null; then
+    sudo apt install -y snapd
+fi
+
 echo "Essential utilities installed" 
