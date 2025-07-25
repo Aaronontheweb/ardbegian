@@ -6,5 +6,15 @@ rm zellij.tar.gz zellij
 cd -
 
 mkdir -p ~/.config/zellij/themes
-[ ! -f "$HOME/.config/zellij/config.kdl" ] && cp ~/.local/share/omakub/configs/zellij.kdl ~/.config/zellij/config.kdl
+
+# Generate default Zellij config instead of using Omakub's custom one
+if [ ! -f "$HOME/.config/zellij/config.kdl" ]; then
+    zellij setup --dump-config > ~/.config/zellij/config.kdl
+    # Add theme configuration to the default config
+    echo "" >> ~/.config/zellij/config.kdl
+    echo "// Theme configuration" >> ~/.config/zellij/config.kdl
+    echo "theme \"tokyo-night\"" >> ~/.config/zellij/config.kdl
+fi
+
+# Still copy the theme file
 cp ~/.local/share/omakub/themes/tokyo-night/zellij.kdl ~/.config/zellij/themes/tokyo-night.kdl
