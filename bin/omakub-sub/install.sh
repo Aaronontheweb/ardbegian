@@ -5,6 +5,7 @@ CHOICES=(
   "1password         Manage your passwords securely across devices"
   "Audacity          Record and edit audio"
   "ASDControl        Set brightness on Apple Studio and XDR displays"
+  "Discord           Chat for Communities and Friends"
   "Dropbox           Sync files across computers with ease"
   "Gimp              Image manipulation tool ala Photoshop"
   "Geekbench         CPU benchmaking tool"
@@ -13,6 +14,7 @@ CHOICES=(
   "OBS Studio        Record screencasts with inputs from both display + webcam"
   "Ollama            Run LLMs, like Meta's Llama3, locally"
   "Retroarch         Play retro games"
+  "Slack             Team communication and collaboration platform"
   "Spotify           Stream music from the world's most popular service"
   "Steam             Play games from Valve's store"
   "Tailscale         Mesh VPN based on WireGuard and with Magic DNS"
@@ -46,6 +48,8 @@ else
   "ollama") INSTALLER_FILE="$OMAKUB_PATH/install/terminal/optional/app-ollama.sh" ;;
   "tailscale") INSTALLER_FILE="$OMAKUB_PATH/install/terminal/optional/app-tailscale.sh" ;;
   "geekbench") INSTALLER_FILE="$OMAKUB_PATH/install/terminal/optional/app-geekbench.sh" ;;
+  "discord") INSTALLER_FILE="$OMAKUB_PATH/install/desktop/app-discord.sh" ;;
+  "slack") INSTALLER_FILE="$OMAKUB_PATH/install/desktop/app-slack.sh" ;;
   *) INSTALLER_FILE="$OMAKUB_PATH/install/desktop/optional/app-$INSTALLER.sh" ;;
   esac
 
