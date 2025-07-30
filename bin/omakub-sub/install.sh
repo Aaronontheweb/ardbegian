@@ -12,6 +12,7 @@ CHOICES=(
   "Mainline Kernels  Install newer Linux kernels than Ubuntu defaults"
   "Minecraft         Everyone's favorite blocky building game"
   "OBS Studio        Record screencasts with inputs from both display + webcam"
+  "DaVinci Resolve   Professional video editing and color grading software"
   "Ollama            Run LLMs, like Meta's Llama3, locally"
   "Retroarch         Play retro games"
   "Slack             Team communication and collaboration platform"
