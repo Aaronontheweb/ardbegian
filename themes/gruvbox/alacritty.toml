@@ -22,3 +22,9 @@ blue = "0x7daea3"
 magenta = "0xd3869b"
 cyan = "0x89b482"
 white = "0xd4be98"
+
+[colors.cursor]
+cursor = "0xd4be98"
+
+[colors.vi_mode_cursor]
+cursor = "0xd4be98"

@@ -34,3 +34,9 @@ color = '#ffa066'
 [[colors.indexed_colors]]
 index = 17
 color = '#ff5d62'
+
+[colors.cursor]
+cursor = '#dcd7ba'
+
+[colors.vi_mode_cursor]
+cursor = '#dcd7ba'

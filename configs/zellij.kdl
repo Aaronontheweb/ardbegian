@@ -1,7 +1,6 @@
 theme "tokyo-night";
 default_layout "compact";
 on_force_close "quit";
-
 # Status bar configuration
 status_bar {
     mode "locked" {
@@ -19,7 +18,6 @@ status_bar {
         }
     }
 }
-
 default_mode "locked";
 keybinds clear-defaults=true {
     locked {

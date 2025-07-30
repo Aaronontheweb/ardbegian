@@ -27,3 +27,9 @@ white = '#acb0d0'
 
 [colors.selection]
 background = '#7aa2f7'
+
+[colors.cursor]
+cursor = '#c0caf5'
+
+[colors.vi_mode_cursor]
+cursor = '#c0caf5'
