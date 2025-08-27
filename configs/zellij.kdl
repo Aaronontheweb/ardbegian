@@ -134,6 +134,40 @@ keybinds clear-defaults=true {
         }
     }
     shared_among "normal" "locked" {
+        # --- Browser-like tab management ---
+        # New / close tab
+        bind "Ctrl t"         { NewTab; SwitchToMode "locked"; }
+        bind "Ctrl w"         { CloseTab; SwitchToMode "locked"; }
+
+        # Next / previous tab (like Ctrl+Tab / Ctrl+Shift+Tab)
+        bind "Ctrl Tab"       { GoToNextTab; }
+        bind "Ctrl Shift Tab" { GoToPreviousTab; }
+
+        # Alt navigation that works in more terminals
+        bind "Ctrl PageDown"  { GoToNextTab; }
+        bind "Ctrl PageUp"    { GoToPreviousTab; }
+
+        # Jump to tab by index (Ctrl+1..9)
+        bind "Ctrl 1" { GoToTab 1; SwitchToMode "locked"; }
+        bind "Ctrl 2" { GoToTab 2; SwitchToMode "locked"; }
+        bind "Ctrl 3" { GoToTab 3; SwitchToMode "locked"; }
+        bind "Ctrl 4" { GoToTab 4; SwitchToMode "locked"; }
+        bind "Ctrl 5" { GoToTab 5; SwitchToMode "locked"; }
+        bind "Ctrl 6" { GoToTab 6; SwitchToMode "locked"; }
+        bind "Ctrl 7" { GoToTab 7; SwitchToMode "locked"; }
+        bind "Ctrl 8" { GoToTab 8; SwitchToMode "locked"; }
+        bind "Ctrl 9" { GoToTab 9; SwitchToMode "locked"; }
+
+        # Reorder tabs (like many editors/browsers)
+        bind "Ctrl Shift PageUp"   { MoveTab "left"; }
+        bind "Ctrl Shift PageDown" { MoveTab "right"; }
+        bind "Ctrl Shift Left"     { MoveTab "left"; }
+        bind "Ctrl Shift Right"    { MoveTab "right"; }
+
+        # Rename current tab (F2 vibe)
+        bind "F2" { SwitchToMode "renametab"; TabNameInput 0; }
+        
+        # --- Original pane navigation bindings ---
         bind "Alt Left" { MoveFocusOrTab "left"; }
         bind "Alt Down" { MoveFocus "down"; }
         bind "Alt Up" { MoveFocus "up"; }
@@ -145,12 +179,10 @@ keybinds clear-defaults=true {
         bind "Alt ]" { NextSwapLayout; }
         bind "Alt f" { ToggleFloatingPanes; }
         bind "Alt h" { MoveFocusOrTab "left"; }
-        bind "Alt i" { MoveTab "left"; }
         bind "Alt j" { MoveFocus "down"; }
         bind "Alt k" { MoveFocus "up"; }
         bind "Alt l" { MoveFocusOrTab "right"; }
         bind "Alt n" { NewPane; }
-        bind "Alt o" { MoveTab "right"; }
     }
     shared_except "locked" "renametab" "renamepane" {
         bind "Ctrl g" { SwitchToMode "locked"; }
